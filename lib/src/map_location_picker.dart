@@ -218,7 +218,7 @@ class MapLocationPicker extends StatefulWidget {
       borderRadius: BorderRadius.all(Radius.circular(12)),
     ),
     this.borderRadius = const BorderRadius.all(Radius.circular(12)),
-    this.searchHintText = "Start typing to search",
+    this.searchHintText = "Start typing to search test",
     this.bottomCardShape = const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(12)),
     ),
