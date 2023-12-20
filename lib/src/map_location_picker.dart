@@ -198,6 +198,25 @@ class MapLocationPicker extends StatefulWidget {
   /// Defaults to 0
   final int minCharsForSuggestions;
 
+  /// LocationButton Bottom padding
+  /// Defaults to 8
+  final double locationButtonBottomPadding;
+
+  /// LocationButton Color
+  final Color? locationButtonColor;
+
+  /// Show clear button
+  final bool showClearButton;
+
+  /// Top padding for search bar
+  final double searchbarTopPadding;
+
+  /// Right padding for search bar
+  final double searchbarRightPadding;
+
+  /// Markers to be placed on the map.
+  final Set<Marker> markers;
+
   const MapLocationPicker({
     Key? key,
     this.desiredAccuracy = LocationAccuracy.high,
@@ -218,7 +237,7 @@ class MapLocationPicker extends StatefulWidget {
       borderRadius: BorderRadius.all(Radius.circular(12)),
     ),
     this.borderRadius = const BorderRadius.all(Radius.circular(12)),
-    this.searchHintText = "Start typing to search test",
+    this.searchHintText = "Start typing to search",
     this.bottomCardShape = const RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(12)),
     ),
@@ -266,7 +285,13 @@ class MapLocationPicker extends StatefulWidget {
     this.focusNode,
     this.fabTooltip = 'My Location',
     this.fabIcon =  Icons.my_location,
-    this.minCharsForSuggestions = 0
+    this.minCharsForSuggestions = 0,
+    this.locationButtonBottomPadding = 5,
+    this.locationButtonColor,
+    this.showClearButton = true,
+    this.searchbarTopPadding = 2,
+    this.searchbarRightPadding = 0,
+    this.markers = const <Marker>{},
   }) : super(key: key);
 
   @override
@@ -355,12 +380,7 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
               },
               onMapCreated: (GoogleMapController controller) =>
                   _controller.complete(controller),
-              markers: {
-                Marker(
-                  markerId: const MarkerId('one'),
-                  position: _initialPosition,
-                ),
-              },
+              markers: widget.markers,
               myLocationButtonEnabled: false,
               myLocationEnabled: true,
               zoomControlsEnabled: false,
@@ -373,6 +393,7 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
+                SizedBox(width: MediaQuery.of(context).size.width),
                 PlacesAutocomplete(
                   focusNode: widget.focusNode,
                   bottom: widget.bottom,
@@ -429,16 +450,19 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
                       formattedAddress: placesDetails.result.formattedAddress,
                       types: placesDetails.result.types,
                     );
-
+        
                     // updating the suggestion box modal data
                     _decodeAddress(
                       Location(
                           lat: _initialPosition.latitude,
                           lng: _initialPosition.longitude),
                     );
-
+        
                     setState(() {});
                   },
+                  showClearButton: widget.showClearButton,
+                  searchbarTopPadding: widget.searchbarTopPadding,
+                  searchbarRightPadding: widget.searchbarRightPadding,
                 ),
                 Spacer(),
                 if (!widget.hideMapTypeButton)
@@ -488,42 +512,54 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
                   ),
                 if (!widget.hideLocationButton)
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: FloatingActionButton(
-                      tooltip: widget.fabTooltip,
-                      backgroundColor: Theme.of(context).primaryColor,
-                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                      onPressed: () async {
-                        // call parent method
-                        if (widget.getLocation != null) {
-                          widget.getLocation!.call();
-                        }
-
-                        if (widget.hasLocationPermission) {
-                          await Geolocator.requestPermission();
-                          Position position =
-                              await Geolocator.getCurrentPosition(
-                            desiredAccuracy: widget.desiredAccuracy,
-                          );
-                          LatLng latLng =
-                              LatLng(position.latitude, position.longitude);
-                          _initialPosition = latLng;
-                          final controller = await _controller.future;
-                          controller.animateCamera(
-                            CameraUpdate.newCameraPosition(
-                              cameraPosition(),
-                            ),
-                          );
-                          _decodeAddress(
-                            Location(
-                              lat: position.latitude,
-                              lng: position.longitude,
-                            ),
-                          );
-                          setState(() {});
-                        }
-                      },
-                      child: Icon(widget.fabIcon),
+                    padding:  EdgeInsets.only(top: 5,  bottom: widget.locationButtonBottomPadding, left: 5,right: 5),
+                    child: Card(
+                      color: widget.locationButtonColor?? Theme.of(context).primaryColor,
+                      shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(360),
+                      ),
+                      elevation: 5,
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.5),
+                        child: SizedBox(
+                          width: 48,
+                          height: 48,
+                          child: TextButton(
+                                              
+                            onPressed: () async {
+                              // call parent method
+                              if (widget.getLocation != null) {
+                                widget.getLocation!.call();
+                              }
+                          
+                              if (widget.hasLocationPermission) {
+                                await Geolocator.requestPermission();
+                                Position position =
+                                    await Geolocator.getCurrentPosition(
+                                  desiredAccuracy: widget.desiredAccuracy,
+                                );
+                                LatLng latLng =
+                                    LatLng(position.latitude, position.longitude);
+                                _initialPosition = latLng;
+                                final controller = await _controller.future;
+                                controller.animateCamera(
+                                  CameraUpdate.newCameraPosition(
+                                    cameraPosition(),
+                                  ),
+                                );
+                                _decodeAddress(
+                                  Location(
+                                    lat: position.latitude,
+                                    lng: position.longitude,
+                                  ),
+                                );
+                                setState(() {});
+                              }
+                            },
+                            child: Icon(widget.fabIcon, color: Theme.of(context).colorScheme.onPrimary,),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 if (!widget.hideBottomCard)
