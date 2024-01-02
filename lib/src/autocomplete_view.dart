@@ -481,7 +481,7 @@ class PlacesAutocomplete extends StatelessWidget {
                     InputDecoration(
                       hintText: searchHintText,
                       border: InputBorder.none,
-                      filled: true,
+                      // filled: true,
                       suffixIcon: (showClearButton && initialValue == null)
                           ? IconButton(
                               icon: const Icon(Icons.close),
