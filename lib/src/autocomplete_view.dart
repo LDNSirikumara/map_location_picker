@@ -468,7 +468,8 @@ class PlacesAutocomplete extends StatelessWidget {
         child: Card(
           margin: topCardMargin,
           shape: topCardShape,
-          color: topCardColor,
+          // color: topCardColor,
+          color: Colors.red,
           child: ListTile(
             minVerticalPadding: 0,
             contentPadding: const EdgeInsets.only(right: 4, left: 4),
@@ -479,7 +480,7 @@ class PlacesAutocomplete extends StatelessWidget {
                 minCharsForSuggestions: minCharsForSuggestions,
                 decoration: decoration ??
                     InputDecoration(
-                      hintText: searchHintText,
+                      hintText: 'searchHintText',
                       border: InputBorder.none,
                       // filled: true,
                       suffixIcon: (showClearButton && initialValue == null)
