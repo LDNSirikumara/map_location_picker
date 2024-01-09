@@ -217,6 +217,9 @@ class MapLocationPicker extends StatefulWidget {
   /// Markers to be placed on the map.
   final Set<Marker> markers;
 
+  /// Input decoration for the search bar
+  final InputDecoration? inputDecoration;
+
   const MapLocationPicker({
     Key? key,
     this.desiredAccuracy = LocationAccuracy.high,
@@ -292,6 +295,7 @@ class MapLocationPicker extends StatefulWidget {
     this.searchbarTopPadding = 2,
     this.searchbarRightPadding = 0,
     this.markers = const <Marker>{},
+    this.inputDecoration,
   }) : super(key: key);
 
   @override
@@ -463,6 +467,7 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
                   showClearButton: widget.showClearButton,
                   searchbarTopPadding: widget.searchbarTopPadding,
                   searchbarRightPadding: widget.searchbarRightPadding,
+                  decoration: widget.inputDecoration,
                 ),
                 Spacer(),
                 if (!widget.hideMapTypeButton)

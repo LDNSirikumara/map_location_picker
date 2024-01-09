@@ -480,7 +480,7 @@ class PlacesAutocomplete extends StatelessWidget {
                 minCharsForSuggestions: minCharsForSuggestions,
                 decoration: decoration ??
                     InputDecoration(
-                      hintText: 'searchHintText',
+                      hintText: searchHintText,
                       border: InputBorder.none,
                       // filled: true,
                       suffixIcon: (showClearButton && initialValue == null)
