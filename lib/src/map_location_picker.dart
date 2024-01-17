@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import "package:google_maps_webapi/geocoding.dart";
 import 'package:google_maps_webapi/places.dart';
 import 'package:http/http.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart' hide ErrorBuilder;
 
 import 'autocomplete_view.dart';
 import 'logger.dart';
@@ -220,6 +221,12 @@ class MapLocationPicker extends StatefulWidget {
   /// Input decoration for the search bar
   final InputDecoration? inputDecoration;
 
+  /// Suggestions box decoration
+  final SuggestionsBoxDecoration suggestionsBoxDecoration;
+
+  /// Vertical offset for the suggestions box
+  final double suggestionsBoxVerticalOffset;
+
   const MapLocationPicker({
     Key? key,
     this.desiredAccuracy = LocationAccuracy.high,
@@ -296,6 +303,8 @@ class MapLocationPicker extends StatefulWidget {
     this.searchbarRightPadding = 0,
     this.markers = const <Marker>{},
     this.inputDecoration,
+    this.suggestionsBoxDecoration =const SuggestionsBoxDecoration(),
+    this.suggestionsBoxVerticalOffset = 5,
   }) : super(key: key);
 
   @override
@@ -468,6 +477,8 @@ class _MapLocationPickerState extends State<MapLocationPicker> {
                   searchbarTopPadding: widget.searchbarTopPadding,
                   searchbarRightPadding: widget.searchbarRightPadding,
                   decoration: widget.inputDecoration,
+                  suggestionsBoxDecoration: widget.suggestionsBoxDecoration,
+                  suggestionsBoxVerticalOffset: widget.suggestionsBoxVerticalOffset,
                 ),
                 Spacer(),
                 if (!widget.hideMapTypeButton)
